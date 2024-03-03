@@ -1,0 +1,141 @@
+import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+from operator import itemgetter
+import numpy as np
+
+
+# IMG_0369.mp4 ball position coordinates
+# original ball position coordinates
+ball_position_coordinates = [[474, 787], [468, 735], [461, 814], [456, 641], [459, 626], [466, 614], [473, 605], [483, 605], [492, 611], [497, 622], [499, 629], [504, 634], [508, 636], [516, 641], [533, 648], [539, 642], [563, 618], [575, 581], [1406, 275], [540, 505], [450, 477], [448, 459], [554, 348], [613, 271], [459, 433], [729, 144], [785, 97], [456, 486], [450, 486], [949, 22], [999, 19], [1043, 26], [1090, 26], [439, 485], [436, 484], [434, 486], [436, 487], [440, 487], [1345, 241], [1358, 313], [1373, 310], [1367, 307], [452, 488], [456, 493], [469, 491], [476, 491], [1341, 400], [1347, 317], [1348, 317], [1348, 313], [1301, 609], [1288, 675], [1285, 752], [1277, 793], [1268, 732], [1350, 310], [1351, 306], [1350, 305], [1351, 307], [1231, 526], [1225, 513], [1220, 505], [1216, 500]]
+
+""""
+# eliminate point - [1406, 275]
+ball_position_coordinates = [[474, 787], [468, 735], [461, 814], [456, 641], [459, 626], [466, 614], [473, 605], [483, 605], [492, 611], [497, 622], [499, 629], [504, 634], [508, 636], [516, 641], [533, 648], [539, 642], [563, 618], [575, 581], [540, 505], [450, 477], [448, 459], [554, 348], [613, 271], [459, 433], [729, 144], [785, 97], [456, 486], [450, 486], [949, 22], [999, 19], [1043, 26], [1090, 26], [439, 485], [436, 484], [434, 486], [436, 487], [440, 487], [1345, 241], [1358, 313], [1373, 310], [1367, 307], [452, 488], [456, 493], [469, 491], [476, 491], [1341, 400], [1347, 317], [1348, 317], [1348, 313], [1301, 609], [1288, 675], [1285, 752], [1277, 793], [1268, 732], [1350, 310], [1351, 306], [1350, 305], [1351, 307], [1231, 526], [1225, 513], [1220, 505], [1216, 500]]
+
+# IMG_1266.mp4 ball position coordinates
+ball_position_coordinates = [[1438, 578], [1439, 578], [1438, 578], [1362, 698], [1360, 558], [1439, 578], [1362, 556], [1361, 552], [1362, 549], [1362, 702], [1361, 532], [1363, 701], [1368, 506], [1368, 499], [1371, 493], [1372, 488], [1375, 487], [1377, 700], [1376, 699], [1379, 699], [1378, 479], [1381, 698], [1379, 477], [756, 275], [756, 276], [756, 276], [756, 275], [1383, 697], [1384, 696], [1386, 697], [1387, 696], [1384, 698], [1384, 695], [1384, 696], [1387, 697], [1388, 698], [1373, 520], [1387, 699], [1385, 697], [1388, 696], [1392, 687], [1393, 692], [1362, 569], [1383, 670], [1378, 644], [1362, 532], [1367, 518], [1371, 507], [1374, 502], [1357, 588], [1388, 496], [1392, 495], [1325, 518], [756, 276], [756, 276], [757, 275], [1360, 393], [1408, 440], [1291, 276], [1255, 231], [1403, 458], [1182, 150], [1146, 123], [1111, 103], [1076, 87], [1036, 77], [999, 75], [965, 79], [927, 91], [889, 108], [852, 134], [813, 163], [781, 197], [756, 278], [752, 274], [755, 278], [760, 276], [1330, 475], [1322, 471], [802, 344], [1294, 475], [824, 401], [757, 273], [853, 488], [1254, 467], [1244, 466], [892, 654], [902, 670], [914, 622], [921, 580], [933, 546]]
+"""
+
+x = []
+y = []
+
+print("Ball Coordinates", ball_position_coordinates[0:10])
+sorted_coordinates = sorted(ball_position_coordinates, key=itemgetter(0))
+
+print("Sorted Ball Coordinates", sorted_coordinates[0:10])
+
+x=[]
+y=[]
+z=[]
+x1=[]
+y1=[]
+z1=[]
+
+for index, value in enumerate(sorted_coordinates): 
+    ball_position_coordinates[index][0] = 1920 - ball_position_coordinates[index][0]
+
+    x.append(ball_position_coordinates[index][0])
+    y.append(-(ball_position_coordinates[index][1]))
+    z.append(index)
+    # threshold for eliminating points
+    if ball_position_coordinates[index][1]< 272 :
+      x1.append(ball_position_coordinates[index][0])
+      y1.append(-(ball_position_coordinates[index][1]))
+      z1.append(index)
+
+# basic 2D plot of ball trajectory without eliminating points
+# image resolution in the video was 1920x1080 
+# image starts with 0,0 in the top left corner
+# in python plot the coordinates of the graph start with 0,0 at bottom left
+# to use ball_coordinates, must make y-coordinates
+plt.figure("line and marker plot of original ball coordinates")
+plt.xlim([0, 1920])
+plt.ylim([-1080, 0])
+plt.plot(x,y,linestyle='--', marker='o')
+plt.show()
+
+# plt.show()
+plt.figure("scatterplot of original ball coordinates")
+plt.xlim([0, 1920])
+plt.ylim([-1080, 0])
+plt.scatter(x,y)
+plt.show()
+
+
+# basic 2D plot of ball trajectory
+plt.figure("basic 2d plot of cut ball coordinates")
+plt.xlim([0, 1920])
+plt.ylim([-1080, 0])
+plt.plot(x1,y1,linestyle='--', marker='o')
+plt.show()
+
+
+# 3D plot with time
+# fig = plt.figure()
+# ax = fig.add_subplot(projection='3d')
+fig = plt.figure("3d plot of original ball coordinates")
+ax = fig.add_subplot(projection='3d')
+
+ax.set_xlabel('time')
+ax.set_ylabel('Hor')
+ax.set_zlabel('Ver')
+
+ax.plot3D(z, x, y, marker='o')
+plt.show()
+
+
+# model fit
+model = np.poly1d(np.polyfit(x1, y1, 2))
+
+#add fitted polynomial line to scatterplot
+polyline = np.linspace(x1[0], x1[len(x1)-1], 10)
+plt.figure("scatterplot cut ball coordinates")
+plt.xlim([0, 1920])
+plt.ylim([-1080, 0])
+plt.scatter(x1, y1)
+plt.show()
+plt.figure("parabola fitted curve for cut ball coordinates")
+plt.xlim([0, 1920])
+plt.ylim([-1080, 0])
+plt.plot(polyline, model(polyline))
+plt.show()
+
+#            2
+# -0.001949 x + 3.787 x - 1858
+print(model)
+
+angle = np.arctan(4.497)
+print(angle)
+print(angle*180/3.14)
+
+"""
+x1 = []
+y1 = []
+for lst in ball_position_coordinates:
+    x1.append(lst[0])
+    y1.append(lst[1])
+
+xmin = min(x1)
+xminpos = x1.index(xmin)
+print (xmin, xminpos)
+xmax = max(x1)
+xmaxpos = x1.index(xmax)
+print (xmax, xmaxpos)
+
+print("x1 =", x1)
+print("y1 =", y1)
+
+z=[-a for a in y1[xminpos:xmaxpos]]
+x2 = [a for a in x1[xminpos:xmaxpos]]
+
+model = np.poly1d(np.polyfit(x2, z, 2))
+
+#add fitted polynomial line to scatterplot
+polyline = np.linspace(x2[0], x2[len(x2)], 50)
+plt.scatter(x2, z)
+plt.plot(polyline, model(polyline))
+plt.show()
+"""
+
+
